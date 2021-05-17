@@ -150,7 +150,7 @@ class IHS:
         new_result = self.calculate_f_x(NHV)
         if new_result!=self.best_f_x()[0]:
             result_change=abs(new_result-self.best_f_x()[0]) #liczenie do przerwania jeśli zmiana za mała (w mainie)
-        # print('Nowy wynik z wektorem: ', new_result, '   ', NHV) # For debug
+        # # print('Nowy wynik z wektorem: ', new_result, '   ', NHV) # For debug
         
         # Create a list of sorted dictionary keys, from lowest f_x to highest
         Sorted_f_x = sorted(self.HM)
@@ -161,6 +161,10 @@ class IHS:
             self.HM[new_result] = NHV       # Add new vector and result to HM
 
             self.NewSolutions[new_result] = NHV       # Add new vector and result to good solutions
+
+        # if new_result!=self.best_f_x()[0]:
+        #     result_change=abs(new_result-self.best_f_x()[0]) #liczenie do przerwania jeśli zmiana za mała (w mainie)
+        
         # print(self.HM) # for debug
 
         return result_change #new_result

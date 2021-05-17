@@ -276,7 +276,7 @@ def display_menu(currentFnc):
     print('-----------------------------------------------')
     print('1 - Zmień parametry aktualnego zadania')
     print('2 - Zmień f. celu na gotowy szablon')
-    print('3 - Zmień f. celu na testową(f. koła)')
+    print('3 - Zmień f. celu na testową')
     print('4 - Wpisz ręcznie nową f. celu(utwórz plik)')
     print('5 - Policz')
     print('6 - IHS')
