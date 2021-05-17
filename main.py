@@ -149,9 +149,9 @@ def calculate_task():
     system('pause')
 
 def calculate_IHS():
-    max_iterations = 200000
-    desired_result = 0.01 # TODO change to lack of progress in last iterations
-    min_result_change=0.00001
+    max_iterations = 1000
+   # desired_result = 0.001 # TODO change to lack of progress in last iterations
+    min_result_change=0.001
     
     algo = IHS(currentFunction,max_iterations) # without "algo": missing 1 required positional argument: 'self'
     algo.displayParameters() 
@@ -162,25 +162,31 @@ def calculate_IHS():
     # Step 5: Check Stopping Criteria
     ###################################
     iterations = 0
+    IterationsW=[] #wektor trzymajacy numer kolejnych iteracji do wykresu logarytmicznego
     # Improvise and update until max iterations passed or algo is better than desired result. 
     while iterations < max_iterations: #algo.best_f_x() > desired_result and
         result_change=algo.improvise_and_update(iterations)
-        
-        if result_change<min_result_change:
+        IterationsW.append(iterations)
+       # round(result_change,3)
+       # print(result_change)
+        if result_change<min_result_change:       #to nie dziala dobrze jeszcze
             break
+        
         iterations += 1
     # Summary after hard work:
     #print('TU JEST RESULT CHANGE!!!!!' ,result_change)
     algo.displayParameters() 
     print('Komentarz z obecnej funkcji: ')
     print('     ', currentFunction.scoreComment)
-
+    #print(algo.bestF_X)        #do sprawdzania czemu warunek stopu nie dziala
+    print('Liczba iteracji: ',iterations)
      ###################################
-    # Rysowanie dla funkcji dwuch zmiennych (wykres 2D)
+    # Rysowanie dla funkcji dwoch zmiennych (wykres 2D) i 3D
     ###################################
 
     if  len(currentFunction.x)==2:
         point=algo.HM.get(algo.best_f_x())
+        
         delta = 0.1 #co ile krok, im mniejszy tym lepiej
         x=[0,0,0,0,0]
         Z=[]
@@ -204,8 +210,21 @@ def calculate_IHS():
         ax3D= plt.axes(projection='3d')
         ax3D.contour3D(X,Y,Z,50) #50 - ilosc warstwic
         ax3D.plot3D(point[0],point[1],algo.best_f_x(),'red',marker='o')
+
+         ###################################
+    # Rysowanie logartymicznego wykresu f(x) ???
+    ###################################
+        fig,logwyk = plt.subplots()
+        logwyk.set_xscale('log')
+        logwyk.plot(IterationsW,algo.bestF_X,'o-',color='red') ##OD CZEGO MA BYC WYKRES LOGARYTMICZNY??? OD ITERACJI?? (TAK ZROBIE, SIE ZMIENI NAJWYZEJ)
         plt.show()
     #print(algo.HM.get(algo.best_f_x()))
+
+    ###################################
+    # Rysowanie dla funkcji dwoch zmiennych (wykres 2D)
+    ###################################
+    fig,logwyk = plt.subplots()
+
     system('pause')
 
 '''    f_values=[] #wartosci funkcji

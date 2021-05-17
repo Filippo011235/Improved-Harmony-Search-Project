@@ -20,13 +20,14 @@ class IHS:
         self.HMCR = 0.80 # (0,1) decyduje czy wybieramy historyczny czy losowy wektor
         self.PAR = 0.6 # to mielismy zmieniac, prawdopodobienstwo pitch adjustingu -> x=x+rand*bw
         self.bw = 1/10 # distance bound wide, liczone w step3
-        self.accuracy = 2 # how many digits are being considered 0.XXXX
+        self.accuracy = 3 # how many digits are being considered 0.XXXX
         self.PAR_max=0.99
         self.PAR_min=0.35
         self.bw_max=4
         self.bw_min=1/1000000
         self.NI=NI
         self.c=math.log(self.bw_min/self.bw_max)/self.NI
+        self.bestF_X=[] #to trzyma kolejne wyniki najlepszych f(x) do wyswietlania w mainie
         ###################################
         # Step 2: Initialize HM:
         ###################################
@@ -141,16 +142,23 @@ class IHS:
         new_result = self.calculate_f_x(NHV)
         if new_result!=self.best_f_x():
             result_change=abs(new_result-self.best_f_x()) #liczenie do przerwania jeśli zmiana za mała (w mainie)
-        # print('Nowy wynik z wektorem: ', new_result, '   ', NHV) # For debug
+        #^ chyba nie dziala dobrze, zrobie srednia moze bedzie lepiej
         
+
+        # print('Nowy wynik z wektorem: ', new_result, '   ', NHV) # For debug
+        self.bestF_X.append(self.best_f_x()) #do wyswietlania w mainie i do wykresu log
         # Create a list of sorted dictionary keys, from lowest f_x to highest
         Sorted_f_x = sorted(self.HM)
         # Update HM, if new_result is better than the worst f_x key([-1] in a sorted list)
         # Also, new_result cannot already be in HM -> prevents edge case(I think)
         if new_result < Sorted_f_x[-1] and new_result not in self.HM:
+            #
             del self.HM[Sorted_f_x[-1]]     # Remove HM dict entry with key "Sorted_f_x[-1]"
             self.HM[new_result] = NHV       # Add new vector and result to HM
+            
         # print(self.HM) # for debug
+        new_result=0
+        
 
         return result_change #new_result
     
