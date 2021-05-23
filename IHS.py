@@ -20,8 +20,8 @@ class IHS:
         self.accuracy = 3 # how many digits are being considered 0.XXXX
         self.PAR_max=0.99
         self.PAR_min=0.35
-        self.bw_max=4
-        self.bw_min=1/1000000
+        self.bw_max=3
+        self.bw_min=1/10000
         self.PAR = self.PAR_min # to mielismy zmieniac, prawdopodobienstwo pitch adjustingu -> x=x+rand*bw
         self.bw = self.bw_max # distance bound wide, liczone w step3
         self.NI=NI

@@ -56,22 +56,26 @@ def change_current_parameters():
     for i in range(len(currentFunction.x)):
         print(3+i, '- zakres x[',i,']: ', currentFunction.x[i])
     print()
+    print('0 - Wyjdz do menu')
+    print()
 
     fncParameter = int(input('Wybrana opcja: ')) # get the input and make it an int
+    while(fncParameter != 0):
+        # Primitive switch for updating the currFnc
+        # ranges of x[n] have to be for fncParameter >= 3 to handle varying n dimension
+        if fncParameter == 1:
+            currentFunction.fnc = input('Nowy wzór f(x): ')
+        elif fncParameter == 2:
+            currentFunction.scoreComment = input('Nowy komentarz f(x): ')
+        elif fncParameter >= 3:
+            idx = fncParameter-3 # idx is a subset of 0..4
+            input_text = 'Nowy zakres x[' + str(idx) + ']: '
+            new_x = list(map(int, input(input_text).split()))
+            currentFunction.x[idx] = new_x
+        else:
+            print('Zly nr opcji :(')
 
-    # Primitive switch for updating the currFnc
-    # ranges of x[n] have to be for fncParameter >= 3 to handle varying n dimension
-    if fncParameter == 1:
-        currentFunction.fnc = input('Nowy wzór f(x): ')
-    elif fncParameter == 2:
-        currentFunction.scoreComment = input('Nowy komentarz f(x): ')
-    elif fncParameter >= 3:
-        idx = fncParameter-3 # idx is a subset of 0..4
-        input_text = 'Nowy zakres x[' + str(idx) + ']: '
-        new_x = list(map(int, input(input_text).split()))
-        currentFunction.x[idx] = new_x
-    else:
-        print('Zly nr opcji :(')
+        fncParameter = int(input('Kolejna opcja: ')) # get the input and make it an int
     system('pause')
 
 def change_to_template():
@@ -151,8 +155,8 @@ def calculate_task():
     system('pause')
 
 def calculate_IHS():
-    max_iterations = 10000
-    min_result_change=0.001
+    max_iterations = 20000
+    min_result_change=0.000001
     
     algo = IHS(currentFunction,max_iterations) # without "algo": missing 1 required positional argument: 'self'
     algo.displayParameters() 
