@@ -15,13 +15,13 @@ class IHS:
         self.xRanges = FncToCalculate.x # 1:1 przepisz z TaskFunction danych
         self.N = len(self.xRanges) # ilosc zmiennych decyzyjnych 
 
-        self.HMS = 6 # ilosc wektorow rozwiazan w HM
-        self.HMCR = 0.95 # (0,1) decyduje czy wybieramy historyczny czy losowy wektor
+        self.HMS = 5 # ilosc wektorow rozwiazan w HM
+        self.HMCR = 0.90 # (0,1) decyduje czy wybieramy historyczny czy losowy wektor
         self.accuracy = 3 # how many digits are being considered 0.XXXX
-        self.PAR_max=0.99
-        self.PAR_min=0.35
-        self.bw_max=3
-        self.bw_min=1/10000
+        self.PAR_max = 0.99
+        self.PAR_min = 0.35
+        self.bw_max = 2
+        self.bw_min = 1/(10^self.accuracy)
         self.PAR = self.PAR_min # to mielismy zmieniac, prawdopodobienstwo pitch adjustingu -> x=x+rand*bw
         self.bw = self.bw_max # distance bound wide, liczone w step3
         self.NI=NI
@@ -102,7 +102,7 @@ class IHS:
         
         NHV = [None] * self.N # "New Harmony Vector" - Stores new decision variables values
         self.PAR = round(self.PAR_min+(self.PAR_CONST)*gn, 2)
-        self.bw = round(self.bw_max*math.exp(self.c*gn), 6)
+        self.bw = round(self.bw_max*math.exp(self.c*gn), self.accuracy)
         for i in range(self.N): # iterate over each dec. var. x
             # TODO - is PAR and bw common, or separate for each x?
             # Narazie zakładam stałe, brane z "self."
@@ -167,5 +167,5 @@ class IHS:
         
         # print(self.HM) # for debug
 
-        return result_change #new_result
+        return self.best_f_x()[0] #new_result
     

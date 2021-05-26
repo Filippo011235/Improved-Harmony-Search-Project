@@ -155,8 +155,8 @@ def calculate_task():
     system('pause')
 
 def calculate_IHS():
-    max_iterations = 20000
-    min_result_change=0.000001
+    max_iterations = 10000
+    # min_result_change=0.000001
     
     algo = IHS(currentFunction,max_iterations) # without "algo": missing 1 required positional argument: 'self'
     algo.displayParameters() 
@@ -167,18 +167,26 @@ def calculate_IHS():
     # Step 5: Check Stopping Criteria
     ###################################
     iterations = 0
+    f_x_over_iterations = []
     # Improvise and update until max iterations passed or algo is better than desired result. 
     while iterations < max_iterations: #algo.best_f_x() > desired_result and
-        result_change = round(algo.improvise_and_update(iterations), 3)
-        
-        if result_change < min_result_change:
-            break
+        f_x_over_iterations.append(round(algo.improvise_and_update(iterations), 3))
+        # if result_change < min_result_change:
+        #     break
         iterations += 1
     # Summary after hard work:
-    print('Iter: ' ,iterations, '   Poprawa wyniku: ', result_change)
+    print('Iter: ' ,iterations)# , '   Poprawa wyniku: ', result_change)
     algo.displayParameters() 
     print('Komentarz z obecnej funkcji: ')
     print('     ', currentFunction.scoreComment)
+
+    print('Pierwsze wartości: ', f_x_over_iterations[0:3])
+    plt.plot(range(1, max_iterations+1),f_x_over_iterations)
+    plt.grid()
+    # plt.set_title('Wykres logarytmiczny f_x(N)')
+    plt.xscale("log")
+    if len(currentFunction.x)!=2: # for len(x)==2, plt.show() is later on 
+        plt.show()
     
     
     ###################################
@@ -204,7 +212,7 @@ def calculate_IHS():
         ax.clabel(CS, inline=True, fontsize=10, fmt='%1.1f')  #numerowanie warotsci warstwic
         ax.xaxis.grid(True, zorder=0)
         ax.yaxis.grid(True, zorder=0)
-        ax.set_title('Warstwice 2D')
+        # ax.set_title('Warstwice 2D')
         best_x = []
         best_y = []
         best_fx = []
@@ -220,12 +228,15 @@ def calculate_IHS():
         for xy in range(0,best_len,best_iterator):
             plot_best_x.append(best_x[xy])
             plot_best_y.append(best_y[xy])
-            ax.plot(best_x[xy],best_y[xy],'o',color='blue')
-        ax.plot(plot_best_x,plot_best_y,color='red')
-        fig=plt.figure()
-        ax3D= plt.axes(projection='3d')
-        ax3D.contour3D(X,Y,Z, 10) #50 - ilosc warstwic
-        ax3D.scatter(point[0],point[1],algo.best_f_x()[0],marker='o',color='red')
+            ax.plot(best_x[xy],best_y[xy],'o',color='#FF6600')
+        ax.plot(plot_best_x,plot_best_y,color='orange')
+        # Highlight the last, best, point
+        ax.plot(best_x[best_len-1],best_y[best_len-1],'*',color='#0000FF',markersize=12)
+            # Plot 3D
+        # fig=plt.figure()
+        # ax3D= plt.axes(projection='3d')
+        # ax3D.contour3D(X,Y,Z, 10) #50 - ilosc warstwic
+        # ax3D.scatter(point[0],point[1],algo.best_f_x()[0],marker='o',color='red')
         plt.show()
     #print(algo.HM.get(algo.best_f_x()))
     system('pause')
@@ -282,14 +293,14 @@ def display_menu(currentFnc):
     print('2 - Zmień f. celu na gotowy szablon')
     print('3 - Zmień f. celu na testową')
     print('4 - Wpisz ręcznie nową f. celu(utwórz plik)')
-    print('5 - Policz')
+    print('5 - Policz dla punktu')
     print('6 - IHS')
     print('7 - Wyjdź')
     print()
 
 
 
-####### The Holy Main #######
+####### The Holy (Quasi) Main #######
 
 
 while(not quit_bool):
